@@ -1,7 +1,7 @@
 from llama_cpp import Llama
 import os
 
-MODEL_PATH = os.getenv("MODEL_PATH", r"C:\llm_models\lm_studio\mistral-7b-instruct-v0.1.Q5_0.gguf")
+MODEL_PATH = os.getenv("MODEL_PATH", r"models\mistral-7b-instruct-v0.1.Q4_K_M.gguf")
 
 llm = Llama(model_path=MODEL_PATH, n_ctx=2048, n_threads=8, n_gpu_layers=40, verbose=False)
 

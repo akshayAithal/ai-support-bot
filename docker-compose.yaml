@@ -5,9 +5,37 @@ services:
     build: .
     ports:
       - "5000:5000"
+    runtime: nvidia
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities: [gpu]
     volumes:
       - ./models:/app/models           # Mount model files
       - ./instance:/app/instance         # Mount the SQLite database file
     environment:
       - MODEL_PATH=/app/models/mistral.Q4_K_M.gguf
       - MODEL_FILES=/app/models/Mistral-7B-v0.1
+  trainer:
+    build:
+      context: .
+      dockerfile: Dockerfile.train
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities: [gpu]
+    runtime: nvidia
+    environment:
+      - HF_HOME=/app/cache
+    volumes:
+      - ./models:/app/models
+      - ./chat.db:/app/chat.db
+    command: >
+      sh -c "
+        echo '0 1 * * 0 python export_feedback.py && python fine_tune/train_lora.py' > /etc/cron.d/trainer-cron &&
+        chmod 0644 /etc/cron.d/trainer-cron &&
+        crontab /etc/cron.d/trainer-cron &&
+        cron -f
+      "

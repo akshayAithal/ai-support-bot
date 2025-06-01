@@ -16,7 +16,7 @@ def get_next_model_version(base_dir="models"):
 
 
 # Load base model + tokenizer
-model_path = os.getenv("MODEL_FILES", r"C:\llm_models\Mistral-7B-v0.1")
+model_path = os.getenv("MODEL_FILES", r"models\Mistral-7B-v0.1")
 model = AutoModelForCausalLM.from_pretrained(model_path, torch_dtype=torch.bfloat16)
 tokenizer = AutoTokenizer.from_pretrained(model_path)
 
