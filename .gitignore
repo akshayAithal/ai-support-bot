@@ -1,0 +1,60 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*.pyo
+*.so
+
+# Virtual environments
+.env/
+.venv/
+env/
+venv/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# SQLite DB
+chat.db
+
+# VSCode / PyCharm config
+.vscode/
+.idea/
+
+# Logs
+*.log
+logs/
+
+# Model cache & checkpoints
+models/*.gguf
+models/*checkpoint*/
+models/*.bin
+models/*-v*/  # exclude saved fine-tuned model folders if needed
+
+# Hugging Face cache
+~/.cache/huggingface/
+cache/
+hf_cache/
+
+# Output files
+*.jsonl
+*.csv
+*.pkl
+
+# Docker artifacts
+*.tar
+docker-compose.override.yml
+
+# Trainer outputs
+lora_out/
+training_output/
+*.pt
+
+# Environment and secrets
+.env
+*.env
+.env.local
+.env.*
+
+# Mac and OS-specific
+.DS_Store
+Thumbs.db
