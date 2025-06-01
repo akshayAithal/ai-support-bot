@@ -18,4 +18,27 @@ A full-stack AI chatbot system that offers 24/7 customer support with automated 
 ---
 
 ## 🗂 Project Structure
+customer_bot/
+├── app.py # Flask app with chat + feedback logic
+├── model_runner.py # LLM model loading (llama-cpp-python)
+├── models.py # SQLAlchemy models for chat & feedback
+├── export_feedback.py # Extracts low-rated chat data
+├── fine_tune/
+│ └── train_lora.py # Fine-tuning script using LoRA
+├── templates/
+│ └── index.html # Jinja2 UI template
+├── static/
+│ └── style.css # Basic styling
+├── models/
+│ ├── mistral-fp16/ # Base HF model for fine-tuning
+│ ├── mistral-finetuned_v1/ # Fine-tuned model (merged)
+│ └── .keep # Keeps folder structure in Git
+├── requirements.txt # Python dependencies
+├── Dockerfile # App + training Docker image
+├── docker-compose.yaml # Compose setup for web + cron jobs
+├── .gitignore
+└── README.md
+
+Copy
+Edit
 
