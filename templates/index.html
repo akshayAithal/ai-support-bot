@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AI Support Chat</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="chat-container">
+        <h1>AI Customer Support</h1>
+        <a href="{{ url_for('clear_chat') }}" style="float:right;">🧹 Clear Chat</a>
+
+        <form method="POST">
+            <textarea name="message" placeholder="Type your question..." required>{{ user_input or '' }}</textarea>
+            <button type="submit">Send</button>
+        </form>
+
+        {% if chat_history %}
+            <div class="chat-history">
+                <h2>Chat History</h2>
+                {% for msg in chat_history %}
+                    <div class="chat-bubble {{ 'user' if msg.role == 'user' else 'ai' }}">
+                        <strong>{{ msg.role.capitalize() }}:</strong> {{ msg.text }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% if reply %}
+            <form method="POST" action="/feedback">
+                <input type="hidden" name="message" value="{{ user_input }}">
+                <input type="hidden" name="reply" value="{{ reply }}">
+                <label>Rate this response:</label>
+                <select name="rating" required>
+                    <option value="">Select</option>
+                    <option value="5">5 - Excellent</option>
+                    <option value="4">4 - Good</option>
+                    <option value="3">3 - Okay</option>
+                    <option value="2">2 - Bad</option>
+                    <option value="1">1 - Terrible</option>
+                </select>
+                <button type="submit">Submit Feedback</button>
+            </form>
+        {% endif %}
+    </div>
+</body>
+</html>

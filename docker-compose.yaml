@@ -1,0 +1,13 @@
+version: "3.9"
+
+services:
+  ai-support:
+    build: .
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./models:/app/models           # Mount model files
+      - ./instance:/app/instance         # Mount the SQLite database file
+    environment:
+      - MODEL_PATH=/app/models/mistral.Q4_K_M.gguf
+      - MODEL_FILES=/app/models/Mistral-7B-v0.1
