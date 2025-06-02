@@ -14,7 +14,6 @@ This is a fully containerized AI-powered customer support web application that p
 - GGUF format conversion for efficient inference
 - SQLite-based conversation and feedback tracking
 - Cron-based scheduled retraining inside Docker
-- Extensible to Kubernetes for high availability
 
 ---
 
@@ -60,8 +59,9 @@ This is a fully containerized AI-powered customer support web application that p
 - Trigger on commit to `main` branch
 - Build and push Docker image
 - Run fine-tuning job on schedule
+#### TODOs
+- [ ] Add a workflow to `.github/workflows/train.yml`
 
-Add a workflow to `.github/workflows/train.yml`
 
 ### Jenkins (recommended for internal or enterprise use)
 
