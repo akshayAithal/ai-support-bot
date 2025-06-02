@@ -1,97 +1,106 @@
+# AI-Powered Customer Support System
 
-# 🧠 AI-Powered Customer Support System
+**Last Updated:** June 2025
 
-A full-stack AI chatbot system that offers 24/7 customer support with automated feedback collection, learning from negative ratings, fine-tuning LLMs, and a CI/CD-ready architecture using Flask, SQLite, Docker, and LoRA-based retraining.
+## Overview
+
+This is a fully containerized AI-powered customer support web application that provides automated responses 24/7, stores conversations, gathers user feedback, and improves performance over time through fine-tuning. It is designed with modularity and extensibility in mind.
+
+## Features
+
+- Automated chatbot using a locally hosted LLM (TinyLlama or Mistral)
+- Feedback collection on every interaction
+- Weekly retraining based on low-rated interactions using LoRA fine-tuning
+- GGUF format conversion for efficient inference
+- SQLite-based conversation and feedback tracking
+- Cron-based scheduled retraining inside Docker
+- Extensible to Kubernetes for high availability
 
 ---
 
-## 🚀 Features
-
-- ✅ Conversational LLM chatbot using Mistral-7B-Instruct (GGUF + llama-cpp-python)
-- ✅ Web UI built with Flask + Jinja2 (no JS framework)
-- ✅ Chat session persistence using SQLite + SQLAlchemy
-- ✅ User feedback collection (rating)
-- ✅ Weekly feedback export and model fine-tuning with LoRA
-- ✅ Automatic versioning: `mistral-finetuned_vX`
-- ✅ Dockerized with `docker-compose`
-- ✅ CI/CD-ready training loop with cron or GitHub Actions
-
----
-
-## 🗂 Project Structure
+## Folder Structure
 
 ```
-customer_bot/
-├── app.py                    # Flask app with chat + feedback logic
-├── model_runner.py           # LLM model loading (llama-cpp-python)
-├── models.py                 # SQLAlchemy models for chat & feedback
-├── export_feedback.py        # Extracts low-rated chat data
-├── fine_tune/
-│   └── train_lora.py         # Fine-tuning script using LoRA
-├── templates/
-│   └── index.html            # Jinja2 UI template
-├── static/
-│   └── style.css             # Basic styling
+├── app.py                  # Flask app
+├── Dockerfile              # Web app Dockerfile
+├── Dockerfile.trainer      # Training container with GGUF support
+├── docker-compose.yml
+├── fine_tune/              # Fine-tuning scripts and training data
+│   └── train_lora.py
+├── llama.cpp/              # For GGUF conversion
 ├── models/
-│   ├── mistral-fp16/         # Base HF model for fine-tuning
-│   ├── mistral-finetuned_v1/ # Fine-tuned model (merged)
-│   └── .keep                 # Keeps folder structure in Git
-├── requirements.txt          # Python dependencies
-├── Dockerfile                # App + training Docker image
-├── docker-compose.yaml       # Compose setup for web + cron jobs
-├── .gitignore
+│   └── TinyLlama-1.1B-Chat-v1.0/
+│   └── latest_gguf/ -> symlink to latest model version
+├── templates/              # Jinja2 templates
+├── static/                 # CSS/JS/images
+├── instance/               # SQLite DB
 └── README.md
 ```
 
 ---
 
-## 💬 Local Usage
+## Screenshots / GIFs
 
-### 1. Clone the project
-```bash
-git clone https://github.com/yourusername/ai-support-bot.git
-cd ai-support-bot
+To add images:
+
+```md
+![Chat UI](static/images/app.png)
 ```
 
-### 2. Download model manually (GGUF format)
-- Download from: https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.1-GGUF
-- Place `.gguf` model under `./models/`
+To add GIFs:
 
-### 3. Run the chatbot
+```md
+![Demo](static/images/app.gif)
+```
+
+Ensure you store files in the `static/images` or `static/gifs` folders.
+
+---
+
+## CI/CD Options
+
+### GitHub Actions (recommended for open-source or cloud repos)
+
+- Trigger on commit to `main` branch
+- Build and push Docker image
+- Run fine-tuning job on schedule
+
+Add a workflow to `.github/workflows/train.yml`
+
+### Jenkins (recommended for internal or enterprise use)
+
+- Create pipeline job
+- Mount model and data volumes
+- Use `docker-compose run trainer`
+- Schedule via Jenkins cron syntax
+
+---
+
+## Running the System
+
 ```bash
 docker-compose up --build
 ```
 
-Visit [http://localhost:5000](http://localhost:5000)
+To manually trigger training:
 
----
-
-## 🔁 Weekly Auto-Retrain Workflow
-
-- `export_feedback.py` extracts chats with ratings ≤2
-- `train_lora.py` fine-tunes on them using LoRA
-- Merged model is saved as `models/mistral-finetuned_vX/`
-- Can be converted to GGUF for inference deployment
-
----
-
-## 🔧 CI/CD Friendly
-
-Integrate with GitHub Actions, Jenkins, or GitLab CI:
-
-```yaml
-steps:
-  - run: python export_feedback.py
-  - run: python fine_tune/train_lora.py
-  - run: docker build -t yourregistry/ai-support-bot:vX .
-  - run: docker push yourregistry/ai-support-bot:vX
+```bash
+docker-compose run --rm trainer
 ```
 
+To schedule weekly retraining: Handled by `cron` container in Docker Compose. Runs every Monday 3AM.
+
 ---
 
-## 🧑‍💻 Credits
+## Future Scalability
 
-Built by Akshay Aithal using:
-- Flask
-- llama-cpp-python
-- PEFT + LoRA
+- Can be scaled to Kubernetes using `kompose` or manual manifests
+- Use volumes or object storage for model checkpoints
+- Swap SQLite with PostgreSQL for production
+- Add OpenTelemetry for tracing
+
+---
+
+## License
+
+MIT

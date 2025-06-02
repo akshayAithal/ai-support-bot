@@ -46,7 +46,7 @@ hf_cache/
 docker-compose.override.yml
 
 # Trainer outputs
-lora_out/
+lora_out/*
 training_output/
 *.pt
 

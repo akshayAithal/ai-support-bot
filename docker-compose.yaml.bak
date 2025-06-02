@@ -25,7 +25,7 @@ services:
     volumes:
       - .:/app
     environment:
-      - MODEL_FILES=models/Mistral-7B-v0.1
+      - MODEL_FILES=models/latest
     profiles:
       - train
 
@@ -37,4 +37,4 @@ services:
       - .:/app
     entrypoint: ["/bin/sh", "-c"]
     command: >
-      "echo '0 3 * * 1 docker compose run --rm trainer && docker compose restart app' | crontab - && crond -f"
+      "echo '0 3 * * 1 docker compose run --rm trainer' | crontab - && crond -f"

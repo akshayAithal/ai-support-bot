@@ -1,7 +1,11 @@
 from llama_cpp import Llama
 import os
 
-MODEL_PATH = os.getenv("MODEL_PATH", r"models\tinyllama-1.1b-chat-v1.0.Q4_K_M.gguf")
+GGUF_DIR = "models" #"models/latest_gguf"
+default_model_path = next((f"{GGUF_DIR}/{f}" for f in os.listdir(GGUF_DIR) if f.endswith(".gguf")), None)
+
+MODEL_PATH = os.getenv("MODEL_PATH", default_model_path)
+
 
 llm = Llama(model_path=MODEL_PATH, n_ctx=2048, n_threads=8, n_gpu_layers=40, verbose=False)
 

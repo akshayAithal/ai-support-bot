@@ -81,17 +81,31 @@ trainer = Trainer(
 )
 
 trainer.train()
+trainer.save_model("lora_out") 
 
 # ✅ Final Step: Merge LoRA into base model
 print("🔁 Merging LoRA weights into base model...")
 merged_model = PeftModel.from_pretrained(
     AutoModelForCausalLM.from_pretrained(model_path, torch_dtype=torch.bfloat16),
-    "lora_out"
+    "lora_out",
+    local_files_only=True
 )
 merged_model = merged_model.merge_and_unload()
 
 # Save merged model
-save_dir = f"{model_path}/{get_next_model_version()}"
+save_dir = f"models\\{get_next_model_version()}"
 merged_model.save_pretrained(save_dir)
 tokenizer.save_pretrained(save_dir)
 print(f"✅ Merged model saved to: {save_dir}")
+import subprocess
+subprocess.run([
+    "python3", convert_script,
+    "--outtype", "gguf",
+    "--outfile", gguf_path,
+    save_dir  # directory with safetensors or .bin
+])
+
+latest_symlink = "models/latest_gguf"
+if os.path.islink(latest_symlink) or os.path.exists(latest_symlink):
+    os.remove(latest_symlink)
+os.symlink(save_dir, latest_symlink)
