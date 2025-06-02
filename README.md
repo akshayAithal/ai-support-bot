@@ -41,19 +41,16 @@ This is a fully containerized AI-powered customer support web application that p
 
 ## Screenshots / GIFs
 
-To add images:
 
 ```md
-![Chat UI](static/images/app.png)
+![Chat UI](./static/images/app.png)
 ```
 
-To add GIFs:
 
 ```md
-![Demo](static/images/app.gif)
+![Demo](./static/images/app.gif)
 ```
 
-Ensure you store files in the `static/images` or `static/gifs` folders.
 
 ---
 
