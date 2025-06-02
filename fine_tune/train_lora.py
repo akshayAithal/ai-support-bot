@@ -9,26 +9,43 @@ def get_next_model_version(base_dir="models"):
     versions = [
         int(name.split("_v")[-1])
         for name in os.listdir(base_dir)
-        if name.startswith("mistral-finetuned_v")
+        if name.startswith("TinyLlama-finetuned_v")
     ]
     next_version = max(versions, default=0) + 1
-    return f"mistral-finetuned_v{next_version}"
+    return f"TinyLlama-finetuned_v{next_version}"
 
 
 # Load base model + tokenizer
-model_path = os.getenv("MODEL_FILES", r"models\Mistral-7B-v0.1")
+model_path = os.getenv("MODEL_FILES", r"models\TinyLlama-1.1B-Chat-v1.0")
 model = AutoModelForCausalLM.from_pretrained(model_path, torch_dtype=torch.bfloat16)
 tokenizer = AutoTokenizer.from_pretrained(model_path)
 
 # Load dataset
-dataset = load_dataset("json", data_files="fine_tune/train.jsonl")
+dataset = load_dataset("json", data_files="fine_tune/low_rated_feedback.jsonl")
 
-# Tokenization
 def tokenize(sample):
-    prompt = f"[INST] {sample['prompt']} [/INST]"
-    sample = tokenizer(prompt, truncation=True, padding="max_length", max_length=512)
-    sample["labels"] = tokenizer(sample["response"], truncation=True, padding="max_length", max_length=512)["input_ids"]
-    return sample
+    conversation = sample["conversation"]
+
+    encoded = tokenizer(
+        conversation,
+        truncation=True,
+        padding="max_length",
+        max_length=512
+    )
+
+    labels = encoded["input_ids"].copy()
+
+    # Mask tokens not related to "AI:" response
+    ai_start = conversation.find("AI:")
+    if ai_start != -1:
+        ai_tokens = tokenizer(conversation[ai_start:], truncation=True, padding="max_length", max_length=512)["input_ids"]
+        # Replace all non-AI tokens with -100
+        for i in range(len(labels)):
+            if i < len(labels) - len(ai_tokens):
+                labels[i] = -100
+
+    encoded["labels"] = labels
+    return encoded
 
 tokenized = dataset.map(tokenize)
 

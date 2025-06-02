@@ -10,7 +10,7 @@ A full-stack AI chatbot system that offers 24/7 customer support with automated 
 - ✅ Conversational LLM chatbot using Mistral-7B-Instruct (GGUF + llama-cpp-python)
 - ✅ Web UI built with Flask + Jinja2 (no JS framework)
 - ✅ Chat session persistence using SQLite + SQLAlchemy
-- ✅ User feedback collection (rating + optional comment)
+- ✅ User feedback collection (rating)
 - ✅ Weekly feedback export and model fine-tuning with LoRA
 - ✅ Automatic versioning: `mistral-finetuned_vX`
 - ✅ Dockerized with `docker-compose`
@@ -95,4 +95,3 @@ Built by Akshay Aithal using:
 - Flask
 - llama-cpp-python
 - PEFT + LoRA
-- Mistral-7B

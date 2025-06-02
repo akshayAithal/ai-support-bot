@@ -29,6 +29,7 @@ models/*.gguf
 models/*checkpoint*/
 models/*.bin
 models/*-v*/  # exclude saved fine-tuned model folders if needed
+models/*
 
 # Hugging Face cache
 ~/.cache/huggingface/
