@@ -42,14 +42,13 @@ This is a fully containerized AI-powered customer support web application that p
 ## Screenshots / GIFs
 
 
-```md
+
 ![Chat UI](./static/images/app.png)
-```
 
 
-```md
+
 ![Demo](./static/images/app.gif)
-```
+
 
 
 ---
